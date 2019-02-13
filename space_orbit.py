@@ -8,10 +8,7 @@ import math
 import sys
 from datetime import datetime
 import time
-import sys
-# from numba import jit
-# import dis
-# import profile
+
 
 # settings
 # everything time related are in seconds
@@ -19,7 +16,8 @@ sim_time = 1e8
 dt = 3600          # each tick of simultation
 animation_start = 0     # displaying a slice of the whole simulation
 animation_end = sim_time
-frame_skip = 15              # number of frames skipped per each frame showed      default = 15
+# number of frames skipped per each frame showed      default = 15
+frame_skip = 15
 laser_power = float(input("Enter desired laser power > "))
 burn_time = float(input("Enter laser burn time > "))
 
@@ -27,9 +25,11 @@ burn_time = float(input("Enter laser burn time > "))
 class point():
     """returns an object that is a list of two dimensional 'vectors'
     """
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
 
 class body():
     """return a body that has a location (2d vector), mass, velocity, name
@@ -51,7 +51,8 @@ def calculate_single_body_acceleration(bodies, body_index, n, laser_power, burn_
     g_constant = 6.6740831 * 10 ** (-11)
     acceleration = point(0, 0)  # initializing a zero acceleration vector
     target_body = bodies[body_index]
-    for index, other_body in enumerate(bodies):  # gives a list like [(1,sun),(2,earth),....]
+    # gives a list like [(1,sun),(2,earth),....]
+    for index, other_body in enumerate(bodies):
         if index != body_index:     # the hack that only runs the physics of the Sun is turned off
             r = math.sqrt((target_body.location.x - other_body.location.x)**2 +
                           (target_body.location.y - other_body.location.y)**2)
@@ -62,8 +63,10 @@ def calculate_single_body_acceleration(bodies, body_index, n, laser_power, burn_
                 print("ZeroDivisionError occured in computing acceleration: r = 0")
                 temp_acc = 0
             # bug is fixed. acceleration was not additive
-            acceleration.x += temp_acc*(other_body.location.x - target_body.location.x)
-            acceleration.y += temp_acc*(other_body.location.y - target_body.location.y)
+            acceleration.x += temp_acc * \
+                (other_body.location.x - target_body.location.x)
+            acceleration.y += temp_acc * \
+                (other_body.location.y - target_body.location.y)
         else:
             pass
     if target_body.name == "asteroid":
@@ -82,7 +85,8 @@ def laser_acc(bodies, n, laser_power, burn_time):
             laser_force = math.sqrt(1.596e-3*(laser_power-1358.41))   # in N
             number_of_time_intervals = burn_time//dt
             length = len(body.x_hist)
-            if n >= 2 and n < number_of_time_intervals:      # makes sure acc isnt calculated for the first 2 ticks and now it ACTUALLY stops the burn (bug fixed)
+            # makes sure acc isnt calculated for the first 2 ticks and now it ACTUALLY stops the burn (bug fixed)
+            if n >= 2 and n < number_of_time_intervals:
                 x1 = body.x_hist[length-2]
                 x2 = body.x_hist[length-1]
                 y1 = body.y_hist[length-2]
@@ -144,23 +148,34 @@ def progress_bar(count, total):
     print("%s  %s  %s%s" % (bar, "physics running: ", percentage, '%'), end='\r')
 
 
-sun = {"location": point(0, 0), "mass": 2e30, "velocity": point(0, 0)}  # sun mass = 2e30
-mercury = {"location": point(0, 5.7e10), "mass": 3.285e23, "velocity": point(47000, 0)}
-venus = {"location": point(0, 1.1e11), "mass": 4.8e24, "velocity": point(35000, 0)}
+sun = {"location": point(0, 0), "mass": 2e30,
+       "velocity": point(0, 0)}  # sun mass = 2e30
+mercury = {"location": point(
+    0, 5.7e10), "mass": 3.285e23, "velocity": point(47000, 0)}
+venus = {"location": point(0, 1.1e11), "mass": 4.8e24,
+         "velocity": point(35000, 0)}
 earth = {"location": point(-9.124e10, -7.830e10), "mass": 6e24,
          "velocity": point(-2.629e4, 2.417e4)}
-mars = {"location": point(0, 2.2e11), "mass": 2.4e24, "velocity": point(24000, 0)}
-jupiter = {"location": point(0, 7.7e11), "mass": 1e28, "velocity": point(13000, 0)}
-saturn = {"location": point(0, 1.4e12), "mass": 5.7e26, "velocity": point(9000, 0)}
-uranus = {"location": point(0, 2.8e12), "mass": 8.7e25, "velocity": point(6835, 0)}
-neptune = {"location": point(0, 4.5e12), "mass": 1e26, "velocity": point(5477, 0)}
-pluto = {"location": point(0, 3.7e12), "mass": 1.3e22, "velocity": point(4748, 0)}
+mars = {"location": point(0, 2.2e11), "mass": 2.4e24,
+        "velocity": point(24000, 0)}
+jupiter = {"location": point(0, 7.7e11), "mass": 1e28,
+           "velocity": point(13000, 0)}
+saturn = {"location": point(0, 1.4e12), "mass": 5.7e26,
+          "velocity": point(9000, 0)}
+uranus = {"location": point(0, 2.8e12), "mass": 8.7e25,
+          "velocity": point(6835, 0)}
+neptune = {"location": point(0, 4.5e12), "mass": 1e26,
+           "velocity": point(5477, 0)}
+pluto = {"location": point(0, 3.7e12), "mass": 1.3e22,
+         "velocity": point(4748, 0)}
 asteroid = {"location": point(-7.133e10, -1.159e11), "mass": 27e9,
             "velocity": point(-2.812e4, 1.409e4)}
 
 bodies = [
-    body(location=sun["location"], mass=sun["mass"], velocity=sun["velocity"], name="sun"),
-    body(location=earth["location"], mass=earth["mass"], velocity=earth["velocity"], name="earth"),
+    body(location=sun["location"], mass=sun["mass"],
+         velocity=sun["velocity"], name="sun"),
+    body(location=earth["location"], mass=earth["mass"],
+         velocity=earth["velocity"], name="earth"),
     body(location=asteroid["location"], mass=asteroid["mass"],
          velocity=asteroid["velocity"], name="asteroid"),
     body(location=mars["location"], mass=mars["mass"], velocity=mars["velocity"], name="mars")]
@@ -198,12 +213,13 @@ def update(frame):
     frame = frame*(frame_skip+1) + int(start_frame)
     collision_status = detect_collision(bodies, frame)
     if collision_status == True:
-        print ("Collision! Asteroid within earth's sphere of influence!")
-        print (str(frame//24)+" days after the beginning of simulation")
+        print("Collision! Asteroid within earth's sphere of influence!")
+        print(str(frame//24)+" days after the beginning of simulation")
         sys.exit(0)
 
     if frame == end_frame:
-        print("Animation finished: start = %ds   end = %ds " % (animation_start, animation_end))
+        print("Animation finished: start = %ds   end = %ds " %
+              (animation_start, animation_end))
         sys.exit(0)
     for body in bodies:
         x_data, y_data = [], []
@@ -230,9 +246,13 @@ def update(frame):
         trace_y.append(body.y_hist[0:frame])
     trace.set_data(trace_x, trace_y)
     if burn_time > frame*dt:
-        text.set_text(str("Time elapsed: " + str(frame//24)+" days. Burning laser!"))      # since dt is 3600s = 1h, no multiplier for 'frame'
+        # since dt is 3600s = 1h, no multiplier for 'frame'
+        text.set_text(
+            str("Time elapsed: " + str(frame//24)+" days. Burning laser!"))
     else:
-        text.set_text(str("Time elapsed: " + str(frame//24)+" days. Burn finished!"))       # the prompt shows time in days instead of hours, in this version
+        # the prompt shows time in days instead of hours, in this version
+        text.set_text(
+            str("Time elapsed: " + str(frame//24)+" days. Burn finished!"))
     return rock_plot, sun_plot, trace, earth_plot, mars_plot, venus_plot, jupiter_plot, mercury_plot, text
 
 
