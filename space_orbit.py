@@ -54,8 +54,8 @@ def calculate_single_body_acceleration(bodies, body_index, n, laser_power, burn_
     # gives a list like [(1,sun),(2,earth),....]
     for index, other_body in enumerate(bodies):
         if index != body_index:     # the hack that only runs the physics of the Sun is turned off
-            r = math.sqrt((target_body.location.x - other_body.location.x)**2 +
-                          (target_body.location.y - other_body.location.y)**2)
+            r = math.hypot((target_body.location.x - other_body.location.x),
+                          (target_body.location.y - other_body.location.y))
             try:
                 # this value multiplied by the distance in 1 dimension will give the acceleration
                 temp_acc = (g_constant * other_body.mass)/r**3
