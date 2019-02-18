@@ -107,9 +107,6 @@ def laser_acc(bodies, n, laser_power, burn_time):
                 acc_x = (math.cos(theta)*laser_force)/body.mass
                 acc_y = (math.sin(theta)*laser_force)/body.mass
                 return acc_x, acc_y
-            # elif n == number_of_time_intervals:
-            #     print("Burn finished!")  # optional
-            #     return 0, 0
             else:
                 return 0, 0
         else:

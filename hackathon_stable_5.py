@@ -19,6 +19,8 @@ class body():
         self.mass = mass
         self.velocity = velocity
         self.name = name
+        self.x_hist = [self.location.x]
+        self.y_hist = [self.location.y]
 
 def calculate_single_body_acceleration(bodies, body_index, n, laser_power, burn_time):
     """ return the acceleration on a body in bodies caused by other bodies
@@ -27,50 +29,62 @@ def calculate_single_body_acceleration(bodies, body_index, n, laser_power, burn_
     g_constant = 6.6740831 *10 **(-11)
     acceleration = point(0,0)    #initializing a zero acceleration vector
     target_body = bodies[body_index]
-    for index, other_body in enumerate(bodies):    #gives a list like [(1,sun),(2,earth),....]
-        if index == 0 and index != body_index:     # this hack turns off physics between all bodies except sun
-            r = math.sqrt((target_body.location.x - other_body.location.x)**2 + (target_body.location.y - other_body.location.y)**2)
+    for index, other_body in enumerate(bodies):
+        if index != body_index:     # the hack that only runs the physics of the Sun is turned off
+            r = math.hypot((target_body.location.x - other_body.location.x),
+                          (target_body.location.y - other_body.location.y))
             try:
-                temp_acc = (g_constant * other_body.mass)/r**3    #this value multiplied by the distance in 1 dimension will give the acceleration
+                # this value multiplied by the distance in 1 dimension will give the acceleration
+                temp_acc = (g_constant * other_body.mass)/r**3
             except ZeroDivisionError:
-                print ("ZeroDivisionError occured and caught in computing acceleration: r = 0")
-
-            acceleration.x = temp_acc*(other_body.location.x - target_body.location.x)
-            acceleration.y = temp_acc*(other_body.location.y - target_body.location.y)
+                print("ZeroDivisionError occured in computing acceleration: r = 0")
+                temp_acc = 0
+            # bug is fixed. acceleration was not additive
+            acceleration.x += temp_acc * \
+                (other_body.location.x - target_body.location.x)
+            acceleration.y += temp_acc * \
+                (other_body.location.y - target_body.location.y)
         else:
             pass
     if target_body.name == "asteroid":
-        ax, ay = laser_force(bodies, n, laser_power, burn_time)
+        ax, ay = laser_acc(bodies, n, laser_power, burn_time)
         acceleration.x += ax
         acceleration.y += ay
     return acceleration
 
-def laser_force(bodies, n, laser_power, burn_time):
+def laser_acc(bodies, n, laser_power, burn_time):
     for body in bodies:
         if body.name == "asteroid":
             laser_power = float(laser_power)
             burn_time = float(burn_time)
 
             laser_force = math.sqrt(1.596e-3*(laser_power-1358.41))   # in N
-            number_of_time_intervals = burn_time//14400
-            if n < number_of_time_intervals:   # the less than equal sign is fixed
-                x_coordinate = body.location.x
-                y_coordinate = body.location.y
-                if x_coordinate != 0:
-                    theta = math.atan(y_coordinate/x_coordinate)
-                elif x_coordinate == 0 and y_coordinate > 0:
-                    theta = np.pi/2      #zero division is fixed
+            number_of_time_intervals = burn_time//86400
+            length = len(body.x_hist)
+            # makes sure acc isnt calculated for the first 2 ticks and now it ACTUALLY stops the burn (bug fixed)
+            if n >= 2 and n < number_of_time_intervals:
+                x1 = body.x_hist[length-2]
+                x2 = body.x_hist[length-1]
+                y1 = body.y_hist[length-2]
+                y2 = body.y_hist[length-1]
+                delta_x = x2 - x1
+                delta_y = y2 - y1
+                if delta_x > 0 and delta_y > 0:             # extreme hardcoding
+                    theta = math.atan(delta_y/delta_x)
+                elif delta_x < 0 and delta_y > 0:
+                    theta = 3.1415926535 - math.atan(delta_y/abs(delta_x))
+                elif delta_x < 0 and delta_y < 0:
+                    theta = 3.1415926535 + math.atan(abs(delta_y)/abs(delta_x))
+                elif delta_x > 0 and delta_y < 0:
+                    theta = -1*math.atan(abs(delta_y)/delta_x)
                 else:
-                    theta = -1*np.pi/2
+                    return 0, 0             # hardcoding not done yet. cases delta_x = 0 and delta_y = 0
 
-                acc_x = (math.sin(theta)*laser_force)/body.mass
-                acc_y = (-math.cos(theta)*laser_force)/body.mass
+                acc_x = (math.cos(theta)*laser_force)/body.mass
+                acc_y = (math.sin(theta)*laser_force)/body.mass
                 return acc_x, acc_y
-            elif n == number_of_time_intervals:
-                print ("Burn finished!")   #optional
-                return 0 , 0
             else:
-                return 0 ,0
+                return 0, 0
         else:
             pass
 
@@ -87,9 +101,8 @@ def calculate_position(bodies, dt = 14400):   # dt = 4 hours, 6 ticks/day
     for body in bodies:
         body.location.x += body.velocity.x * dt
         body.location.y += body.velocity.y *dt
-        print (body.location.x, body.location.y)
 
-def compute_gravity_step(bodies, n, laser_power, burn_time, dt = 14400):
+def compute_gravity_step(bodies, n, laser_power, burn_time, dt = 86400):
     calculate_velocity(bodies, n, laser_power, burn_time, dt = dt)
     calculate_position(bodies, dt = dt)
 
@@ -117,10 +130,10 @@ bodies = [
 fig, ax = plt.subplots()
 xdata, ydata = [], []   # this is for current position data
 x_hist, y_hist = [], []  # this is for historical position data
-ln, = plt.plot([], [], 'ro', markersize = 6, animated=True)      # 'ro' = red circle 'bo' = blue circle ...
+asteroid, = plt.plot([], [], 'ro', markersize = 6, animated=True)      # 'ro' = red circle 'bo' = blue circle ...
 ln1, = plt.plot([],[], "bo", markersize = 0.01, animated = True)   #markersize = how big the circle is
 earth, = plt.plot([],[], "go", markersize = 6, animated=True)
-# ln is the current position, ln1 is the past position
+# ln1 is the past position
 ttl = ax.text(0, 0, '', transform = ax.transAxes,fontsize = 10)
 sun, = plt.plot([],[],'yo', markersize = 10, animated =True)
 
@@ -128,19 +141,19 @@ def init():
     ax.set_xlim(-5e11, 5e11)     # these 2 define the scale of the graph
     ax.set_ylim(-5e11, 5e11)
     ttl.set_text('')
-    return ln, ttl
+    return ttl,
 
 def update(frame):
     if frame == 0:
         global laser_power
         global burn_time
         laser_power = input("Laser Power (W) > ")    # inputs the power and burn time from user on the first iteration
-        burn_time = input('Burn time (s) > ')
+        burn_time = float(input('Burn time (s) > '))
     xdata, ydata = [], []
     xdata2, ydata2 = [],[]
     sunx, suny = [],[]
     compute_gravity_step(bodies,frame, laser_power, burn_time)   # each frame is one dt
-    for body in bodies:
+    for body in bodies:                                 # frame = n which is passed down thru the physics functions
         if body.name == "asteroid":
             xdata.append(body.location.x)
             ydata.append(body.location.y)
@@ -151,14 +164,14 @@ def update(frame):
             sunx.append(body.location.x)
             suny.append(body.location.y)
 
-    ln.set_data(xdata, ydata)
+    asteroid.set_data(xdata, ydata)
     earth.set_data(xdata2, ydata2)
     sun.set_data(sunx,suny)
     for body in bodies:
         x_hist.append(body.location.x)
         y_hist.append(body.location.y)
     ln1.set_data(x_hist, y_hist)
-    a_e_distance = math.sqrt((bodies[1].location.x-bodies[2].location.x)**2 + (bodies[1].location.y - bodies[2].location.y)**2)
+    a_e_distance = math.hypot((bodies[1].location.x-bodies[2].location.x), (bodies[1].location.y - bodies[2].location.y))
 
     if a_e_distance < 1.5e9:
         print("Collision: asteroid in Hill sphere")
@@ -174,8 +187,8 @@ def update(frame):
         print ("vx earth: ", bodies[1].velocity.x)
         print ("vy earth: ", bodies[1].velocity.y)"""
         sys.exit(0)
-    ttl.set_text(str("Time elapsed: "+ str(frame*4)+" hours" +"   Burn Time: " + str(int(burn_time)//3600)+' hours'))
-    return ln, ln1, earth, ttl, sun
+    ttl.set_text(str("Time elapsed: "+ str(frame*24)+" hours" +"   Burn Time: " + str(int(burn_time)//3600)+' hours'))
+    return asteroid, ln1, earth, ttl, sun
 
 ani = FuncAnimation(fig, update, interval = 1, init_func=init, blit=True)
 
