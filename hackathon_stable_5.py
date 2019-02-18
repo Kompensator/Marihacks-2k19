@@ -4,6 +4,7 @@ from matplotlib.animation import FuncAnimation
 import math
 import sys
 
+#useless comment
 class point():
     """returns an object that is a two dimensional 'vector'
     """
