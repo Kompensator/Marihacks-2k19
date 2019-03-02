@@ -9,7 +9,7 @@ class Body(object):
     default values for earth
     update_position needs dt to run
     """
-    def __init__ (self, name = "Earth", r = 1e11, angle=0, eccentriticy=0.0167, major_ax=3e11, color=(255,255,255)):    
+    def __init__ (self, name = "Earth", r = 1.5e11, angle=0, eccentriticy=0.0167, major_ax=3e11, color=(255,255,255)):    
         self.name = name
         self.r = r
         self.angle = angle      #changes
@@ -22,6 +22,8 @@ class Body(object):
         self.areal_v = (G*G*sun_mass*sun_mass*(self.eccentricity**2 - 1))/(8*self.energy)
         self.color = color
         self.q = self.a*(1 - self.eccentricity**2)
+        self.period = ((4*math.pi**2*self.a**3)/(G*sun_mass))**0.5
+
 
         print("Body "+ name+ " created")
 
@@ -49,12 +51,22 @@ class Body(object):
         return a_ellipse, e_ellipse
 
     def get_transfer_time(self, other_body):
-        a , e = get_transfer_ellipse(self, other_body)
-        t = 0.5* (((4*math.pi**2*a**3)/(G*sun_mass))**0.5)
-        return t 
-
-if __name__ == "__name__":
-
+        a , e = self.get_transfer_ellipse(other_body)
+        p_ellipse = (((4*math.pi**2*a**3)/(G*sun_mass))**0.5)
+        t_transfer = 0.5 * p_ellipse
+        return t_transfer
     
+    def get_launch_angle(self, other_body):
+        t_transfer = self.get_transfer_time(other_body)
+        other_initial_angle = t_transfer*360/other_body.period
+        launch_angle_delta = 180 - other_initial_angle
+        return launch_angle_delta
+
+if __name__ == "__main__":
+    Earth = Body()
+    print (Earth.period)
+    Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11)
+    launch_angle_delta = Earth.get_launch_angle(Mars)
+    print (launch_angle_delta)
 else:
     pass
