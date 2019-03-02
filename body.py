@@ -4,8 +4,12 @@ global G, sun_mass
 G = 6.673e-11
 sun_mass = 1.989e30
 
-class body(object):
-    def __init__ (self, name, r, angle, eccentriticy, major_ax, color):    
+class Body(object):
+    """ Docstring for Body class
+    default values for earth
+    update_position needs dt to run
+    """
+    def __init__ (self, name = "Earth", r = 1e11, angle=0, eccentriticy=0.0167, major_ax=3e11, color=(255,255,255)):    
         self.name = name
         self.r = r
         self.angle = angle
