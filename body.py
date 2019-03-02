@@ -27,20 +27,23 @@ class Body(object):
         self.angle += (2*self.areal_v/self.r**2)*delta_t
         self.r = self.q/(1 + self.eccentricity*math.cos(math.radians(self.angle)))
         self.velocity = (G*sun_mass*(2/self.r - 1/(self.a)))**0.5
+        if self.angle > 360:
+            self.fix_angle()
         return math.cos(math.radians(self.angle))*self.r, math.sin(math.radians(self.angle))*self.r
+
+    def fix_angle(self):
+        self.angle = self.angle%360
+
+    def angle_difference(self, other_body):
+        difference = other_body.angle - self.angle
+        return difference
 
 
 
 
 
 if __name__ == "__name__":
-    earth = body("Earth", 1.5e11, 0, 0.0167, 3e11, (255,255,255))
-    delta_t = 3600
-    for i in range(1000000):
-        x, y = earth.update_position(delta_t)
-        print ("x = "+str(x))
-        print ("y = "+str(y))
-        print (earth.velocity)
+
     
 else:
     pass
