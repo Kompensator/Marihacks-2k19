@@ -9,11 +9,15 @@ fps = 30
 secs_per_msecs = 1000*3600
 pixels_per_meter = (2/3*height)/1.5e11
 
-#Coordinate conversions, from (0, 0) being the middle of the screen to (0, 0) being top-left
+#Conversion from pixels to meters
+def pixels(centeredx, centeredy):
+    return centeredx*pixels_per_meter, centeredy*pixels_per_meter
+#Coordinate conversions, from (0m, 0m) being the middle of the screen to (0px, 0px) being top-left
 def convert_coords(centeredx, centeredy):
-    absx = width/2+centeredx*pixels_per_meter
-    absy = height/2-centeredy*pixels_per_meter
-    return absx, absy
+    px_cent_x, px_cent_y = pixels(centeredx, centeredy)
+    px_abs_x = width/2+px_cent_x
+    px_abs_y = height/2-px_cent_y
+    return px_abs_x, px_abs_y
 
 #Initialization
 pygame.init()
@@ -39,7 +43,7 @@ while mainloop:
     #Body movement
     for body in bodies:
         centered_coords = body.update_position(ms*secs_per_msecs)
-        abs_coords = convert_coords(*centered_coords)
+        px_coords = convert_coords(*centered_coords)
 
 
     #Event handling
