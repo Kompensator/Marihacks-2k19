@@ -44,7 +44,7 @@ class Body(object):
     
     def get_transfer_ellipse(self, other_body):
         other_angle = self.initial_angle + 180
-        r2 = other_body.q / 1 + other_body.eccentricity
+        r2 = other_body.q / (1 + other_body.eccentricity*math.cos(math.radians(other_body.angle)))
         r1 = self.r
         a_ellipse = (r1 + r2)/2
         e_ellipse = (abs(r1 - r1)/(r1 + r2))
@@ -64,7 +64,6 @@ class Body(object):
 
 if __name__ == "__main__":
     Earth = Body()
-    print (Earth.period)
     Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11)      
     launch_angle_delta = Earth.get_launch_angle(Mars)
     print (launch_angle_delta)
