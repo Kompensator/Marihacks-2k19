@@ -40,7 +40,7 @@ class Body(object):
         difference = other_body.angle - self.angle
         return difference
     
-    def get_transfer_major_ax(self, other_body):
+    def get_transfer_ellipse(self, other_body):
         other_angle = self.initial_angle + 180
         r2 = other_body.q / 1 + other_body.eccentricity
         r1 = self.r
@@ -48,7 +48,10 @@ class Body(object):
         e_ellipse = (abs(r1 - r1)/(r1 + r2))
         return a_ellipse, e_ellipse
 
-    def get_transfer_time(self, other)
+    def get_transfer_time(self, other_body):
+        a , e = get_transfer_ellipse(self, other_body)
+        t = 0.5* (((4*math.pi**2*a**3)/(G*sun_mass))**0.5)
+        return t 
 
 if __name__ == "__name__":
 
