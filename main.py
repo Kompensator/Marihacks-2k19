@@ -10,13 +10,13 @@ secs_per_msecs = 1000*3600
 pixels_per_meter = (2/3*height)/1.5e11
 
 #Conversion from pixels to meters
-def pixel(meters):
+def px(meters):
     return int(meters*pixels_per_meter)
-def pixels(centeredx, centeredy):
-    return int(centeredx*pixels_per_meter), int(centeredy*pixels_per_meter)
+def pxs(centeredx, centeredy):
+    return px(centeredx), px(centeredy)
 #Coordinate conversions, from (0m, 0m) being the middle of the screen to (0px, 0px) being top-left
 def convert_coords(centeredx, centeredy):
-    px_cent_x, px_cent_y = pixels(centeredx, centeredy)
+    px_cent_x, px_cent_y = pxs(centeredx, centeredy)
     px_abs_x = width/2+px_cent_x
     px_abs_y = height/2-px_cent_y
     return px_abs_x, px_abs_y
@@ -35,7 +35,7 @@ clock = pygame.time.Clock()
 
 #Data
 bodies = [Body()]
-body_surfaces = [pygame.Surface((pixel(2*body.r), 2*pixel(2*body.r))) for body in bodies]
+body_surfaces = [pygame.Surface((px(2*body.r), 2*px(2*body.r))) for body in bodies]
 
 while mainloop:
     ms = clock.tick(fps)
@@ -47,9 +47,9 @@ while mainloop:
     for body, surface in zip(bodies, body_surfaces):
         centered_coords = body.update_position(ms*secs_per_msecs)
         px_x, px_y = convert_coords(*centered_coords)
-        pygame.draw.circle(surface, (0, 0, 255), pixels(body.r, body.r), pixel(body.r))
+        pygame.draw.circle(surface, (0, 0, 255), pxs(body.r, body.r), px(body.r))
         surface = surface.convert()
-        screen.blit(surface, (px_x-pixel(body.r), px_y-pixel(body.r)))
+        screen.blit(surface, (px_x-px(body.r), px_y-px(body.r)))
 
     #Event handling
     for event in pygame.event.get():
