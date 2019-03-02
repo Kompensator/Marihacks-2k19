@@ -1,18 +1,19 @@
 import pygame
 from body import Body
 
-#Coordinate conversions, from (0, 0) being the middle of the screen to (0, 0) being top-left
-def convert_coords(centeredx, centeredy):
-    absx = width/2+centeredx
-    absy = height/2-centeredy
-    return absx, absy
-
 #Parameters
 width = 640
 height = 480
 bg_colour = (100, 100, 100)
 fps = 30
 secs_per_msecs = 1000*3600
+pixels_per_meter = (2/3*height)/1.5e11
+
+#Coordinate conversions, from (0, 0) being the middle of the screen to (0, 0) being top-left
+def convert_coords(centeredx, centeredy):
+    absx = width/2+centeredx*pixels_per_meter
+    absy = height/2-centeredy*pixels_per_meter
+    return absx, absy
 
 #Initialization
 pygame.init()
