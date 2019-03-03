@@ -114,10 +114,15 @@ while mainloop:
             px_x, px_y = convert_coords(*centered_coords)
             screen.blit(spaceship_surface, (px_x-px(body_scale*spaceship.body_radius), px_y-px(body_scale*spaceship.body_radius)))
         
-
+            other_centered_pos = bodies[1].get_position()
+            xdiff = (other_centered_pos[0] - centered_coords[0])
+            ydiff = (other_centered_pos[1] - centered_coords[1])
+            dist = (xdiff**2+ydiff**2)**0.5
+            if (dist <= body_scale*bodies[1].body_radius):
+                phase = 3
 
     elif(phase == 3):
-        pass
+        print("Phase 3")
     else:
         raise ValueError("Phase out of range!")
 
