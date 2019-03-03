@@ -66,13 +66,21 @@ class Body(object):
         return launch_angle_delta
     
 def update(frame):
-    x,y = Earth.update_position(36000)
+    x,y = Earth.update_position(3600000)
+    tracex.append(x)
+    tracey.append(y)
     earth_plot.set_data([x],[y])
-    x,y = Mars.update_position(36000)
+    x,y = Mars.update_position(3600000)
+    tracex.append(x)
+    tracey.append(y)
     mars_plot.set_data([x],[y])
-    return earth_plot, mars_plot
+    trace.set_data(tracex, tracey)
+    
+    return earth_plot, mars_plot, trace
 
 if __name__ == "__main__":
+    tracex, tracey = [], []
+
     Earth = Body()
     Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11) 
     fig, ax = plt.subplots()
@@ -83,6 +91,7 @@ if __name__ == "__main__":
                        markerfacecolor='#2b63d8', markersize=7, animated=True)
     mars_plot, = plt.plot([], [], color='#f58061', marker='o',
                       markerfacecolor='#f58061', markersize=6, animated=True)
+    trace, = plt.plot([],[], color='blue', marker='o', markerfacecolor='blue',markersize = 0.01, animated=True)
     
     ani = FuncAnimation(fig, update, interval=1, blit=True)
     plt.show()
