@@ -2,6 +2,8 @@ import pygame
 import math
 import os
 from body import Body
+from sys import argv
+
 
 #Parameters
 width = 800
@@ -16,6 +18,19 @@ global G, sun_mass
 G = 6.673e-11
 sun_mass = 1.989e30
 descent_speed = 1e-1
+
+#Args
+planet = argv[1].lower()
+if planet == "mars":
+    otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
+    pixels_per_meter = (1/4*height)/1.5e11
+elif planet == "jupiter":
+    otherbody = Body("Jupyter", 778e9, 90, 0.048, 778.57e9, colour=(255,178,102))
+    pixels_per_meter = (1/6*height)/1.5e11
+else:
+    print("Invalid planet \""+planet+"\". Please enjoy Mars")
+    otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
+    pixels_per_meter = (1/4*height)/1.5e11
 
 def px(meters):
     """converting from meters to pixels
@@ -49,8 +64,7 @@ clock = pygame.time.Clock()
 phase = 0
 
 #Data
-bodies = [Body(), 
-          Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))]
+bodies = [Body(), otherbody]
 
 spaceship = Body(name="Spaceship", body_radius=1594525)        # creating an empty object i guess
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
@@ -105,7 +119,7 @@ while mainloop:
             spaceship.r = bodies[0].r
             spaceship.initial_angle = bodies[0].angle
             spaceship.angle = 0
-            spaceship.velocity = math.sqrt(G*sun_mass*(2/spaceship.r - 1/spaceship.a)) 
+            spaceship.velocity = math.sqrt(G*sun_mass*(2/spaceship.r - 1/spaceship.a)) #+ 11500
             spaceship.a, spaceship.eccentricity = bodies[0].get_transfer_ellipse(bodies[1])
             delta_v = spaceship.velocity - math.sqrt(G*sun_mass/spaceship.r)
             spaceship.energy = bodies[0].energy
