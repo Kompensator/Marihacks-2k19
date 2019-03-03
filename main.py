@@ -85,10 +85,10 @@ while mainloop:
             pygame.draw.circle(bsurface, body.colour, pxs(body_scale*body.body_radius, body_scale*body.body_radius), px(body_scale*body.body_radius))
             bsurface = bsurface.convert()
             screen.blit(bsurface, (px_x-px(body_scale*body.body_radius), px_y-px(body_scale*body.body_radius)))
-    sun_surface.set_colorkey((0,0,0))
-    pygame.draw.circle(sun_surface, (252, 212, 64), (25, 25), 25)
-    sun_surface = sun_surface.convert()
-    screen.blit(sun_surface, (width//2-25, height//2 -25))
+        sun_surface.set_colorkey((0,0,0))
+        pygame.draw.circle(sun_surface, (252, 212, 64), (25, 25), 25)
+        sun_surface = sun_surface.convert()
+        screen.blit(sun_surface, (width//2-25, height//2 -25))
 
 
     if(phase == 0):
