@@ -9,7 +9,7 @@ class Body(object):
     default values for earth
     update_position needs dt to run
     """
-    def __init__ (self, name = "Earth", r = 1.5e11, angle=0, eccentricity=0.0167, major_ax=3e11, body_radius=6378100, colour=(0,119,190)):    
+    def __init__ (self, name = "Earth", r = 1.5e11, angle=300, eccentricity=0.0167, major_ax=3e11, body_radius=6378100, colour=(0,119,190)):    
         self.name = name
         self.r = r
         self.angle = angle      #changes

@@ -23,10 +23,10 @@ earth_size = 6378100
 #Args
 planet = argv[1].lower()
 if planet == "mars":
-    otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
+    otherbody = Body("Mars", 2.28555e11, 140, 0.0093, 4.5711e11, colour=(180,0,0))
     pixels_per_meter = (1/4*height)/1.5e11
 elif planet == "jupiter":
-    otherbody = Body("Jupiter", 778e9, 90, 0.048, 778.57e9, body_radius=1e7, colour=(255,178,102))
+    otherbody = Body("Jupiter", 778e9, 140, 0.048, 778.57e9, body_radius=1e7, colour=(255,178,102))
     pixels_per_meter = (1/6*height)/1.5e11
 # elif planet == "venus":
 #    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e9, earth_size*0.7, colour=(238, 215, 135))
@@ -125,7 +125,6 @@ while mainloop:
             spaceship.angle = 0
             spaceship.velocity = math.sqrt(G*sun_mass*(2/spaceship.r - 1/spaceship.a)) #+ 11500
             spaceship.a, spaceship.eccentricity = bodies[0].get_transfer_ellipse(bodies[1])
-            print (spaceship.a, spaceship.eccentricity)
             delta_v = spaceship.velocity - math.sqrt(G*sun_mass/spaceship.r)
             spaceship.energy = bodies[0].energy
             spaceship.energy += delta_v**2/2
