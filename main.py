@@ -95,7 +95,7 @@ while mainloop:
         pass
     elif(phase == 1):
         angle_difference = bodies[0].angle_difference(bodies[1])
-        if (abs(angle_difference - angle_delta)+360) < 1:
+        if (abs(angle_difference - angle_delta)) < 1:
             phase = 2
             print ("Launching!")
 
@@ -181,7 +181,7 @@ while mainloop:
         text = "Press Space to launch!"
     
     elif phase == 1:
-        text = "Waiting for optimal angle = 44 degrees  current angle = "+str(round(bodies[0].angle_difference(bodies[1])))+" degrees"
+        text = "Waiting for optimal angle = 44 degrees  current angle = "+str((round(bodies[0].angle_difference(bodies[1]))+360)%360)+" degrees"
     
     elif phase == 2:
         text = "Houston we're on our way!"
