@@ -95,7 +95,7 @@ while mainloop:
         pass
     elif(phase == 1):
         angle_difference = bodies[0].angle_difference(bodies[1])
-        if abs(angle_difference - angle_delta) < 1:
+        if (abs(angle_difference - angle_delta)+360) < 1:
             phase = 2
             print ("Launching!")
 
