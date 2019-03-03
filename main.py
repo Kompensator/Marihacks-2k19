@@ -7,13 +7,8 @@ width = 800
 height = 600
 bg_colour = (100, 100, 100)
 fps = 60
-<<<<<<< Updated upstream
-secs_per_msecs = 1e5
-pixels_per_meter = (1/3*height)/1.5e11
-=======
 secs_per_msecs = 3.6e5
 pixels_per_meter = (1/4*height)/1.5e11
->>>>>>> Stashed changes
 body_scale = 1000
 
 #Conversion from pixels to meters
