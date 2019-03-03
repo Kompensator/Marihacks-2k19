@@ -49,11 +49,11 @@ class Body(object):
         return difference
     
     def get_transfer_ellipse(self, other_body):
-        other_angle = self.initial_angle + 180
-        r2 = other_body.q / (1 + other_body.eccentricity*math.cos(math.radians(other_body.angle)))
+        other_angle = self.angle + 180
+        r2 = other_body.q / (1 + other_body.eccentricity*math.cos(math.radians(other_angle)))
         r1 = self.r
         a_ellipse = (r1 + r2)/2
-        e_ellipse = (abs(r1 - r1)/(r1 + r2))
+        e_ellipse = (abs(r2 - r1)/(r1 + r2))
         return a_ellipse, e_ellipse
 
     def get_transfer_time(self, other_body):
@@ -67,6 +67,8 @@ class Body(object):
         other_initial_angle = t_transfer*360/other_body.period
         launch_angle_delta = 180 - other_initial_angle
         return launch_angle_delta
+
+        
     
 def update(frame):
     x,y = Earth.update_position(3600000)
