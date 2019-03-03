@@ -1,5 +1,6 @@
 import pygame
 import math
+import os
 from body import Body
 
 #Parameters
@@ -30,9 +31,11 @@ def convert_coords(centeredx, centeredy):
 #Initialization
 pygame.init()
 screen = pygame.display.set_mode((width, height))
-background = pygame.Surface(screen.get_size())
-background.fill(bg_colour)
-background = background.convert()
+background = pygame.Surface(screen.get_size()).convert()
+bg_image = pygame.image.load(os.path.join("data", "stars_bg_4_3.png")).convert()
+bg_image = pygame.transform.scale(bg_image, (width, height))
+#background.fill(bg_colour)
+#background = background.convert()
 
 launch_prepped = False
 mainloop = True
@@ -54,7 +57,7 @@ while mainloop:
         Days since start: {1:.0f}   
         Scale: {2:.0f} km/px""".format(clock.get_fps(), simtime/3600/24, 1/pixels_per_meter/1000)
     pygame.display.set_caption(text)
-    screen.blit(background, (0,0))
+    screen.blit(bg_image, (0,0))
 
     #Movement
     for body, bsurface, psurface in zip(bodies, body_surfaces, path_surfaces):
