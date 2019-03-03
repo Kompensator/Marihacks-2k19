@@ -35,7 +35,8 @@ simtime = 0
 clock = pygame.time.Clock()
 
 #Data
-bodies = [Body(), Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11, colour=(128,0,0))]
+bodies = [Body(), Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11)]
+path_surfaces = [pygame.Surface((px(body.major_ax), px(body.minor_ax))) for body in bodies]
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
 path_surfaces = [pygame.Surface((px(body.major_ax), px(body.minor_ax))) for body in bodies]
 
