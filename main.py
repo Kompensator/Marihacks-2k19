@@ -59,22 +59,23 @@ while mainloop:
     pygame.display.set_caption(text)
     screen.blit(bg_image, (0,0))
 
-    #Movement
-    for body, bsurface, psurface in zip(bodies, body_surfaces, path_surfaces):
-        centered_coords = body.update_position(ms*secs_per_msecs)
-        px_x, px_y = convert_coords(*centered_coords)
+    if(phase < 3):
+        #Movement
+        for body, bsurface, psurface in zip(bodies, body_surfaces, path_surfaces):
+            centered_coords = body.update_position(ms*secs_per_msecs)
+            px_x, px_y = convert_coords(*centered_coords)
 
-        #Paths
-        psurface.set_colorkey((0,0,0))
-        pygame.draw.ellipse(psurface, (0, 0, 255), (0, 0, px(body.major_ax), px(body.minor_ax)), 2)
-        psurface.convert()
-        screen.blit(psurface, convert_coords(-body.c-body.a, body.b))
+            #Paths
+            psurface.set_colorkey((0,0,0))
+            pygame.draw.ellipse(psurface, (0, 0, 255), (0, 0, px(body.major_ax), px(body.minor_ax)), 2)
+            psurface.convert()
+            screen.blit(psurface, convert_coords(-body.c-body.a, body.b))
 
-        #Bodies
-        bsurface.set_colorkey((0,0,0))
-        pygame.draw.circle(bsurface, body.colour, pxs(body_scale*body.body_radius, body_scale*body.body_radius), px(body_scale*body.body_radius))
-        bsurface = bsurface.convert()
-        screen.blit(bsurface, (px_x-px(body_scale*body.body_radius), px_y-px(body_scale*body.body_radius)))
+            #Bodies
+            bsurface.set_colorkey((0,0,0))
+            pygame.draw.circle(bsurface, body.colour, pxs(body_scale*body.body_radius, body_scale*body.body_radius), px(body_scale*body.body_radius))
+            bsurface = bsurface.convert()
+            screen.blit(bsurface, (px_x-px(body_scale*body.body_radius), px_y-px(body_scale*body.body_radius)))
 
     if(phase == 0):
         pass
