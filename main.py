@@ -87,11 +87,11 @@ while mainloop:
             spaceship.r = bodies[0].r
             spaceship.initial_angle = bodies[0].angle
             spaceship.angle = 0
-            spaceship.velocity = math.sqrt(G*sun_mass*(2/spaceship.r - 1/spaceship.a))
+            spaceship.velocity = math.sqrt(G*sun_mass*(2/spaceship.r - 1/spaceship.a)) + 11500
             spaceship.a, spaceship.eccentricity = bodies[0].get_transfer_ellipse(bodies[1])
             delta_v = spaceship.velocity - math.sqrt(G*sun_mass/spaceship.r)
             spaceship.energy = bodies[0].energy
-            # spaceship.energy += delta_v**2/2
+            spaceship.energy += delta_v**2/2
             spaceship.areal_v = ((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
             spaceship.colour = (183,183,183)
             spaceship.q = spaceship.a*(1 - spaceship.eccentricity**2)
