@@ -40,6 +40,14 @@ class Body(object):
         if self.angle > 360:
             self.fix_angle()
         return math.cos(math.radians(self.angle))*self.r, math.sin(math.radians(self.angle))*self.r
+    
+    def spaceship_update(self, delta_t):
+        self.angle += (2*self.areal_v/self.r**2)*delta_t
+        self.r = self.q/(1 + self.eccentricity*math.cos(math.radians(self.angle)))
+        self.velocity = (G*sun_mass*(2/self.r - 1/(self.a)))**0.5
+        if self.angle > 360:
+            self.fix_angle()
+        return math.cos(math.radians(self.angle + self.initial_angle))*self.r, math.sin(math.radians(self.angle + self.initial_angle))*self.r        
 
     def fix_angle(self):
         self.angle = self.angle%360

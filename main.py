@@ -41,7 +41,7 @@ clock = pygame.time.Clock()
 phase = 0
 
 #Data
-bodies = [Body(), Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11, colour=(180,0,0))]
+bodies = [Body(), Body("Mars", 2.28555e11, 44, 0.0093, 4.5711e11, colour=(180,0,0))]
 spaceship = Body(name="Spaceship")        # creating an empty object i guess
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
 path_surfaces = [pygame.Surface(pxs(body.major_ax, body.minor_ax)) for body in bodies]
@@ -76,17 +76,22 @@ while mainloop:
     if(phase == 0):
         pass
     elif(phase == 1):
-        pass
+        angle_difference = bodies[0].angle_difference(bodies[1])
+        if abs(angle_difference - angle_delta) < 1:
+            phase = 2
+            print ("Launching!")
+
     elif(phase == 2):
         if launch_prepped == False:
             # sets the spaceship's position to be equal to earth, but with diff major axis and ecc
             spaceship.r = bodies[0].r
-            spaceship.angle = bodies[0].angle
-            spaceship.velocity = bodies[0].velocity
+            spaceship.initial_angle = bodies[0].angle
+            spaceship.angle = 0
+            spaceship.velocity = math.sqrt(G*sun_mass*(2/spaceship.r - 1/spaceship.a))
             spaceship.a, spaceship.eccentricity = bodies[0].get_transfer_ellipse(bodies[1])
-            delta_v = math.sqrt(G*sun_mass*(2/spaceship.r - 1/spaceship.a)) - math.sqrt(G*sun_mass/spaceship.r)
+            delta_v = spaceship.velocity - math.sqrt(G*sun_mass/spaceship.r)
             spaceship.energy = bodies[0].energy
-            spaceship.energy += delta_v**2/2
+            # spaceship.energy += delta_v**2/2
             spaceship.areal_v = ((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
             spaceship.colour = (183,183,183)
             spaceship.q = spaceship.a*(1 - spaceship.eccentricity**2)
@@ -96,19 +101,17 @@ while mainloop:
             pygame.draw.circle(spaceship_surface, spaceship.colour, pxs(body_scale*spaceship.body_radius, body_scale*spaceship.body_radius), px(body_scale*spaceship.body_radius))
             spaceship_surface = spaceship_surface.convert()
             # centered_coords = spaceship.update_position(ms*secs_per_msecs)
-            px_x, px_y = convert_coords(math.cos(math.radians(spaceship.angle))*spaceship.r, math.sin(math.radians(spaceship.angle))*spaceship.r)
+            px_x, px_y = convert_coords(math.cos(math.radians(spaceship.angle + spaceship.initial_angle))*spaceship.r, math.sin(math.radians(spaceship.angle + spaceship.initial_angle))*spaceship.r)
             screen.blit(spaceship_surface, (px_x-px(body_scale*spaceship.body_radius), px_y-px(body_scale*spaceship.body_radius)))
-            print (spaceship.r)
         else:
             spaceship_surface.set_colorkey((0,0,0))
             pygame.draw.circle(spaceship_surface, spaceship.colour, pxs(body_scale*spaceship.body_radius, body_scale*spaceship.body_radius), px(body_scale*spaceship.body_radius))
             spaceship_surface = spaceship_surface.convert()
-            centered_coords = spaceship.update_position(ms*secs_per_msecs)
-            print (spaceship.r)
+            centered_coords = spaceship.spaceship_update(ms*secs_per_msecs)
             px_x, px_y = convert_coords(*centered_coords)
             screen.blit(spaceship_surface, (px_x-px(body_scale*spaceship.body_radius), px_y-px(body_scale*spaceship.body_radius)))
+        
 
-    
 
     elif(phase == 3):
         pass
@@ -125,6 +128,11 @@ while mainloop:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 mainloop = False
+            if event.key == pygame.K_SPACE:
+                if phase == 0:
+                    phase = 1
+                    angle_delta = bodies[0].get_launch_angle(bodies[1])
+
 
     #Display changes
     pygame.display.flip()
