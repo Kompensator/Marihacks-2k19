@@ -25,7 +25,7 @@ if planet == "mars":
     otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
     pixels_per_meter = (1/4*height)/1.5e11
 elif planet == "jupiter":
-    otherbody = Body("Jupyter", 778e9, 90, 0.048, 778.57e9, colour=(255,178,102))
+    otherbody = Body("Jupyter", 778e9, 90, 0.048, 778.57e9, body_radius=1e7, colour=(255,178,102))
     pixels_per_meter = (1/6*height)/1.5e11
 else:
     print("Invalid planet \""+planet+"\". Please enjoy Mars")
@@ -203,7 +203,7 @@ while mainloop:
         text = "Press Space to launch!"
     
     elif phase == 1:
-        text = "Waiting for optimal angle = 44 degrees  current angle = "+str((round(bodies[0].angle_difference(bodies[1]))+360)%360)+" degrees"
+        text = "Waiting for optimal angle = "+str(round(bodies[0].get_launch_angle(bodies[1])))+ " degrees  current angle = "+str((round(bodies[0].angle_difference(bodies[1]))+360)%360)+" degrees"
     
     elif phase == 2:
         text = "Houston we're on our way!"

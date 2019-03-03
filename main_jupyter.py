@@ -10,7 +10,7 @@ bg_colour = (100, 100, 100)
 fps = 60
 secs_per_msecs = 3.6e5
 pixels_per_meter = (1/6*height)/1.5e11
-body_scale = 2000
+body_scale = 1000
 trace_width = 5
 global G, sun_mass
 G = 6.673e-11
@@ -50,7 +50,7 @@ phase = 0
 
 #Data
 bodies = [Body(), 
-          Body("Jupyter", 778e9, 90, 0.048, 778.57e9, colour=(255,178,102))]
+          Body("Jupyter", 778e9, 90, 0.048, 778.57e9, body_radius=69911e3, colour=(255,178,102))]
 
 spaceship = Body(name="Spaceship", body_radius=1594525)        # creating an empty object i guess
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
