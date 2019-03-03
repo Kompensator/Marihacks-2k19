@@ -66,9 +66,9 @@ class Body(object):
         return launch_angle_delta
     
 def update(frame):
-    x,y = Earth.update_position(7200)
+    x,y = Earth.update_position(36000)
     earth_plot.set_data([x],[y])
-    x,y = Mars.update_position(7200)
+    x,y = Mars.update_position(36000)
     mars_plot.set_data([x],[y])
     return earth_plot, mars_plot
 

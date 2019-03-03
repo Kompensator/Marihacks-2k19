@@ -6,8 +6,8 @@ width = 640
 height = 480
 bg_colour = (100, 100, 100)
 fps = 60
-secs_per_msecs = 1000*3600
-pixels_per_meter = (2/3*height)/1.5e11
+secs_per_msecs = 1000*3600*1000
+pixels_per_meter = (1/3*height)/1.5e11
 
 #Conversion from pixels to meters
 def px(meters):
@@ -47,7 +47,8 @@ while mainloop:
     for body, surface in zip(bodies, body_surfaces):
         centered_coords = body.update_position(ms*secs_per_msecs)
         px_x, px_y = convert_coords(*centered_coords)
-        pygame.draw.circle(surface, (0, 0, 255), pxs(body.r, body.r), px(body.r))
+        surface.set_colorkey((0,0,0))
+        pygame.draw.circle(surface, body.colour, pxs(body.r, body.r), px(body.r))
         surface = surface.convert()
         screen.blit(surface, (px_x-px(body.r), px_y-px(body.r)))
 
