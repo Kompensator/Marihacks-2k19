@@ -68,7 +68,7 @@ class Body(object):
 def update(frame):
     pass
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Earth = Body()
     # Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11) 
     # fig, ax = plt.subplots()
@@ -80,5 +80,5 @@ if __name__ == "__main__":
     # mars_plot, = plt.plot([], [], color='#f58061', marker='o',
     #                   markerfacecolor='#f58061', markersize=6, animated=True)
     
-else:
-    pass
+#else:
+#    pass
