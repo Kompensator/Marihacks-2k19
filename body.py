@@ -1,6 +1,4 @@
 import math
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 
 global G, sun_mass
 G = 6.673e-11
@@ -81,37 +79,8 @@ class Body(object):
 
         
     
-def update(frame):
-    x,y = Earth.update_position(3600000)
-    tracex.append(x)
-    tracey.append(y)
-    earth_plot.set_data([x],[y])
-    x,y = Mars.update_position(3600000)
-    tracex.append(x)
-    tracey.append(y)
-    mars_plot.set_data([x],[y])
-    trace.set_data(tracex, tracey)
-    
-    return earth_plot, mars_plot, trace
-
 if __name__ == "__main__":
-    tracex, tracey = [], []
-
-    Earth = Body()
-    Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11) 
-    fig, ax = plt.subplots()
-    ax.set_facecolor('xkcd:black')
-    ax.set_xlim(-3e11, 3e11)
-    ax.set_ylim(-3e11, 3e11)
-    earth_plot, = plt.plot([], [], color='#2b63d8', marker='o',
-                       markerfacecolor='#2b63d8', markersize=7, animated=True)
-    mars_plot, = plt.plot([], [], color='#f58061', marker='o',
-                      markerfacecolor='#f58061', markersize=6, animated=True)
-    trace, = plt.plot([], [], 'bo', markersize=0.1, animated=True)
-    
-    ani = FuncAnimation(fig, update, interval=1, blit=True)
-    plt.show()
-
+    pass
     
 else:
     pass
