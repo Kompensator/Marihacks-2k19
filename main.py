@@ -35,13 +35,9 @@ simtime = 0
 clock = pygame.time.Clock()
 
 #Data
-<<<<<<< Updated upstream
-bodies = [Body()]
-path_surfaces = [pygame.Surface((px(body.major_ax), px(body.minor_ax))) for body in bodies]
-=======
 bodies = [Body(), Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11, colour=(128,0,0))]
->>>>>>> Stashed changes
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
+path_surfaces = [pygame.Surface((px(body.major_ax), px(body.minor_ax))) for body in bodies]
 
 while mainloop:
     ms = clock.tick(fps)
