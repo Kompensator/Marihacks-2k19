@@ -2,6 +2,7 @@ import pygame
 import math
 from body import Body
 
+ghost_prepped = False
 #Parameters
 width = 800
 height = 600
@@ -35,6 +36,7 @@ mainloop = True
 simtime = 0
 clock = pygame.time.Clock()
 phase = 0
+launch_angle = 0
 
 #Data
 bodies = [Body(), Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11, colour=(180,0,0))]
@@ -67,16 +69,22 @@ while mainloop:
         bsurface = bsurface.convert()
         screen.blit(bsurface, (px_x-px(body_scale*body.body_radius), px_y-px(body_scale*body.body_radius)))
 
-        if(phase == 0):
-            pass
-        elif(phase == 1):
-            pass
-        elif(phase == 2):
-            pass
-        elif(phase == 3):
-            pass
-        else:
-            raise ValueError("Phase out of range!")
+    if(phase == 0):
+        pass
+    elif(phase == 1):
+        if not ghost_prepped:
+            ghost = Body("ghost", angle = launch_angle, colour=(0,119,190, 128))
+            ghost.areal_v = 0
+            bodies.append(ghost)
+            body_surfaces.append(pygame.Surface((px(2*body_scale*ghost.body_radius), px(2*body_scale*ghost.body_radius))))
+            path_surfaces.append(pygame.Surface(pxs(ghost.major_ax, ghost.minor_ax)))
+            ghost_prepped = True
+    elif(phase == 2):
+        pass
+    elif(phase == 3):
+        pass
+    else:
+        raise ValueError("Phase out of range!")
 
     #Event handling
     for event in pygame.event.get():
@@ -87,6 +95,11 @@ while mainloop:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 mainloop = False
+            elif event.key == pygame.K_SPACE:
+                if phase == 0:
+                    phase = 1
+                    launch_angle = bodies[0].angle + bodies[0].get_launch_angle(bodies[1])
+                    
 
     #Display changes
     pygame.display.flip()
