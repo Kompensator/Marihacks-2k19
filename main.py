@@ -125,6 +125,7 @@ while mainloop:
             spaceship.angle = 0
             spaceship.velocity = math.sqrt(G*sun_mass*(2/spaceship.r - 1/spaceship.a)) #+ 11500
             spaceship.a, spaceship.eccentricity = bodies[0].get_transfer_ellipse(bodies[1])
+            print (spaceship.a, spaceship.eccentricity)
             delta_v = spaceship.velocity - math.sqrt(G*sun_mass/spaceship.r)
             spaceship.energy = bodies[0].energy
             spaceship.energy += delta_v**2/2
