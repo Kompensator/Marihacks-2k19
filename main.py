@@ -31,7 +31,7 @@ elif planet == "jupiter":
 # elif planet == "venus":
 #    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e9, earth_size*0.7, colour=(238, 215, 135))
 elif planet == "saturn":
-    otherbody = Body("Saturn", 1443e9, 160, 0.0565, 2886e9, 8e6, colour=(247, 203, 59))
+    otherbody = Body("Saturn", 1443e9, 160, 0.0565, 2886e9, 1.5*8e6, colour=(247, 203, 59))
     pixels_per_meter = (1/20*height)/1.5e11
 else:
     print("Invalid planet \""+planet+"\". Please enjoy Mars")
