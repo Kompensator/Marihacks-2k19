@@ -16,11 +16,14 @@ global G, sun_mass
 G = 6.673e-11
 sun_mass = 1.989e30
 
-#Conversion from pixels to meters
 def px(meters):
+    """converting from meters to pixels
+    """
     return int(meters*pixels_per_meter)
+
 def pxs(centeredx, centeredy):
     return px(centeredx), px(centeredy)
+
 #Coordinate conversions, from (0m, 0m) being the middle of the screen to (0px, 0px) being top-left
 def convert_coords(centeredx, centeredy):
     px_cent_x, px_cent_y = pxs(centeredx, centeredy)
@@ -45,11 +48,14 @@ clock = pygame.time.Clock()
 phase = 0
 
 #Data
-bodies = [Body(), Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))]
+bodies = [Body(), 
+          Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))]
+
 spaceship = Body(name="Spaceship", body_radius=1594525)        # creating an empty object i guess
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
 path_surfaces = [pygame.Surface(pxs(body.major_ax, body.minor_ax)) for body in bodies]
 spaceship_surface = pygame.Surface(pxs(spaceship.major_ax, spaceship.minor_ax))
+sun_surface = pygame.Surface((50, 50))
 myfont = pygame.font.SysFont("Calibri",20)
 
 while mainloop:
@@ -78,6 +84,11 @@ while mainloop:
             pygame.draw.circle(bsurface, body.colour, pxs(body_scale*body.body_radius, body_scale*body.body_radius), px(body_scale*body.body_radius))
             bsurface = bsurface.convert()
             screen.blit(bsurface, (px_x-px(body_scale*body.body_radius), px_y-px(body_scale*body.body_radius)))
+    sun_surface.set_colorkey((0,0,0))
+    pygame.draw.circle(sun_surface, (252, 212, 64), (25, 25), 25)
+    sun_surface = sun_surface.convert()
+    screen.blit(sun_surface, (width//2-25, height//2 -25))
+
 
     if(phase == 0):
         pass
@@ -166,7 +177,6 @@ while mainloop:
         text = "The Eagle has landed!"
     text_surface = myfont.render(text, False, (255,255,255))
     screen.blit(text_surface, (0,0))
-
 
 
     #Display changes
