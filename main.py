@@ -15,6 +15,7 @@ trace_width = 5
 global G, sun_mass
 G = 6.673e-11
 sun_mass = 1.989e30
+descent_speed = 1e-1
 
 def px(meters):
     """converting from meters to pixels
@@ -136,6 +137,7 @@ while mainloop:
                 bg_image = pygame.image.load(os.path.join("data", "mars_ships_bg_4_3.png"))
                 bg_image_scale = width/bg_image.get_width()
                 bg_image = pygame.transform.scale(bg_image, (width, height)).convert()
+                dy = 0
 
     elif(phase == 3):
         ship_image = pygame.image.load(os.path.join("data", "ship.png"))
@@ -143,7 +145,18 @@ while mainloop:
         ship_image = pygame.transform.scale(ship_image, new_dims)
         ship_image.set_colorkey((0,0,0))
         ship_image = ship_image.convert()
-        screen.blit(ship_image, (3*width//5, 100))
+        ship_width = ship_image.get_width()
+        ship_height = ship_image.get_height()
+        dy += descent_speed*ms
+        if dy <= ship_height:
+            ship_lower = ship_image.subsurface((0, ship_height-dy, ship_width, dy))
+            screen.blit(ship_lower, (3*width//5, 0))
+        elif dy <= 4*height//5:
+            screen.blit(ship_image, (3*width//5, dy-ship_height))
+        else:
+            screen.blit(ship_image, ((3*width//5, 4*height//5-ship_height)))
+
+        
 
     else:
         raise ValueError("Phase out of range!")
