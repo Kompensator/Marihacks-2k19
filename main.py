@@ -34,6 +34,7 @@ background = background.convert()
 mainloop = True
 simtime = 0
 clock = pygame.time.Clock()
+phase = 0
 
 #Data
 bodies = [Body(), Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11, colour=(180,0,0))]
@@ -49,17 +50,19 @@ while mainloop:
     pygame.display.set_caption(text)
     screen.blit(background, (0,0))
 
-    #Body movement
+    #Movement
     for body, bsurface, psurface in zip(bodies, body_surfaces, path_surfaces):
         centered_coords = body.update_position(ms*secs_per_msecs)
         px_x, px_y = convert_coords(*centered_coords)
-        bsurface.set_colorkey((0,0,0))
-        psurface.set_colorkey((0,0,0))
 
+        #Paths
+        psurface.set_colorkey((0,0,0))
         pygame.draw.ellipse(psurface, (0, 0, 255), (0, 0, px(body.major_ax), px(body.minor_ax)), 2)
         psurface.convert()
         screen.blit(psurface, convert_coords(-body.c-body.a, body.b))
 
+        #Bodies
+        bsurface.set_colorkey((0,0,0))
         pygame.draw.circle(bsurface, body.colour, pxs(body_scale*body.body_radius, body_scale*body.body_radius), px(body_scale*body.body_radius))
         bsurface = bsurface.convert()
         screen.blit(bsurface, (px_x-px(body_scale*body.body_radius), px_y-px(body_scale*body.body_radius)))
