@@ -121,9 +121,11 @@ while mainloop:
             dist = (xdiff**2+ydiff**2)**0.5
             if (dist <= body_scale*bodies[1].body_radius):
                 phase = 3
+                bg_image = pygame.image.load(os.path.join("data", "mars_ships_bg_4_3.png")).convert()
+                bg_image = pygame.transform.scale(bg_image, (width, height)).convert()
 
     elif(phase == 3):
-        print("Phase 3")
+        pass
     else:
         raise ValueError("Phase out of range!")
 
