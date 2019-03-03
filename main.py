@@ -6,7 +6,7 @@ width = 800
 height = 600
 bg_colour = (100, 100, 100)
 fps = 60
-secs_per_msecs = 1e-10
+secs_per_msecs = 3.6e5
 pixels_per_meter = (1/3*height)/1.5e11
 body_scale = 1000
 
