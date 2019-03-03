@@ -55,7 +55,7 @@ while mainloop:
         px_x, px_y = convert_coords(*centered_coords)
         psurface.set_colorkey((0,0,0))
         bsurface.set_colorkey((0,0,0))
-        pygame.draw.arc(psurface, (0, 0, 255), (0, 0, px(body.major_ax), px(body.major_ax)), 0, 2*math.pi)
+        pygame.draw.ellipse(psurface, (0, 0, 255), (0, 0, px(body.major_ax), px(body.minor_ax)), 2)
         pygame.draw.circle(bsurface, body.colour, pxs(body_scale*body.body_radius, body_scale*body.body_radius), px(body_scale*body.body_radius))
         bsurface = bsurface.convert()
         psurface = psurface.convert()
