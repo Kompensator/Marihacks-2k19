@@ -38,33 +38,31 @@ clock = pygame.time.Clock()
 #Data
 bodies = [Body(), Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11, colour=(180,0,0))]
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
-trace = pygame.Surface((width,height))
-trace.set_colorkey((0,0,0))
-path_x, path_y = [],[]
+path_surfaces = [pygame.Surface(pxs(body.major_ax, body.minor_ax)) for body in bodies]
 
 while mainloop:
     ms = clock.tick(fps)
     simtime += ms*secs_per_msecs
     text = """FPS: {0:.1f}   
-        Days since start: {1:.5f}   
+        Days since start: {1:.0f}   
         Scale: {2:.0f} km/px""".format(clock.get_fps(), simtime/3600/24, 1/pixels_per_meter/1000)
     pygame.display.set_caption(text)
     screen.blit(background, (0,0))
 
     #Body movement
-    for body, bsurface in zip(bodies, body_surfaces):
+    for body, bsurface, psurface in zip(bodies, body_surfaces, path_surfaces):
         centered_coords = body.update_position(ms*secs_per_msecs)
         px_x, px_y = convert_coords(*centered_coords)
-        path_x.append(px_x)
-        path_y.append(px_y)
         bsurface.set_colorkey((0,0,0))
+        psurface.set_colorkey((0,0,0))
+
+        pygame.draw.ellipse(psurface, (0, 0, 255), (0, 0, px(body.major_ax), px(body.minor_ax)), 2)
+        psurface.convert()
+        screen.blit(psurface, convert_coords(-body.c-body.a, body.b))
+
         pygame.draw.circle(bsurface, body.colour, pxs(body_scale*body.body_radius, body_scale*body.body_radius), px(body_scale*body.body_radius))
         bsurface = bsurface.convert()
         screen.blit(bsurface, (px_x-px(body_scale*body.body_radius), px_y-px(body_scale*body.body_radius)))
-    for i in range(len(path_x)):
-        pygame.draw.circle(trace,(255,255,255),(int(path_x[i]),int(path_y[i])),2)
-    trace = trace.convert()
-    screen.blit(trace,(0,0))
 
     #Event handling
     for event in pygame.event.get():
