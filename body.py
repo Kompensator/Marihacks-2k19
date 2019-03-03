@@ -94,7 +94,7 @@ if __name__ == "__main__":
                        markerfacecolor='#2b63d8', markersize=7, animated=True)
     mars_plot, = plt.plot([], [], color='#f58061', marker='o',
                       markerfacecolor='#f58061', markersize=6, animated=True)
-    trace, = plt.plot([],[], color='blue', marker='o', markerfacecolor='blue',markersize = 0.01, animated=True)
+    trace, = plt.plot([], [], 'bo', markersize=0.1, animated=True)
     
     ani = FuncAnimation(fig, update, interval=1, blit=True)
     plt.show()
