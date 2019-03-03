@@ -9,12 +9,12 @@ class Body(object):
     default values for earth
     update_position needs dt to run
     """
-    def __init__ (self, name = "Earth", r = 1.5e11, angle=0, eccentriticy=0.0167, major_ax=3e11, body_radius=6378100, colour=(0,119,190)):    
+    def __init__ (self, name = "Earth", r = 1.5e11, angle=0, eccentricity=0.0167, major_ax=3e11, body_radius=6378100, colour=(0,119,190)):    
         self.name = name
         self.r = r
         self.angle = angle      #changes
         self.initial_angle = angle      #constant 
-        self.eccentricity = eccentriticy
+        self.eccentricity = eccentricity
         self.major_ax = major_ax
         self.a = major_ax/2
         self.b = self.a*(1-self.eccentricity**2)**0.5
@@ -27,6 +27,7 @@ class Body(object):
         self.q = self.a*(1 - self.eccentricity**2)
         self.body_radius = body_radius
         self.period = ((4*math.pi**2*self.a**3)/(G*sun_mass))**0.5
+        self.i = 0
 
 
         print("Body "+ name+ " created")
@@ -38,6 +39,7 @@ class Body(object):
 
     def update_position(self, delta_t):
         self.angle += (2*self.areal_v/self.r**2)*delta_t
+
         if self.angle > 360:
             self.fix_angle()
         return self.get_position()
@@ -49,6 +51,7 @@ class Body(object):
         if self.angle > 360:
             self.fix_angle()
         return math.cos(math.radians(self.angle + self.initial_angle))*self.r, math.sin(math.radians(self.angle + self.initial_angle))*self.r        
+        i +=1
 
     def fix_angle(self):
         self.angle = self.angle%360

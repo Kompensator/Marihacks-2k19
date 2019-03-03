@@ -21,6 +21,7 @@ descent_speed = 1e-1
 earth_size = 6378100
 
 #Args
+argv.append("venus")
 planet = argv[1].lower()
 if planet == "mars":
     otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
@@ -29,7 +30,7 @@ elif planet == "jupiter":
     otherbody = Body("Jupiter", 778e9, 90, 0.048, 778.57e9, body_radius=1e7, colour=(255,178,102))
     pixels_per_meter = (1/6*height)/1.5e11
 elif planet == "venus":
-    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e6, earth_size*0.8, colour=(238, 215, 135))
+    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e9, earth_size*0.7, colour=(238, 215, 135))
 else:
     print("Invalid planet \""+planet+"\". Please enjoy Mars")
     otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
@@ -206,7 +207,7 @@ while mainloop:
         text = "Press Space to launch!"
     
     elif phase == 1:
-        text = "Waiting for optimal angle = "+str(round(bodies[0].get_launch_angle(bodies[1])))+ " degrees  current angle = "+str((round(bodies[0].angle_difference(bodies[1]))+360)%360)+" degrees"
+        text = "Waiting for optimal angle = "+str(round(angle_delta))+ " degrees  Current angle = "+str((round(bodies[0].angle_difference(bodies[1]))+360)%360)+" degrees"
     
     elif phase == 2:
         text = "Houston we're on our way!"
