@@ -33,6 +33,7 @@ pygame.init()
 screen = pygame.display.set_mode((width, height))
 background = pygame.Surface(screen.get_size()).convert()
 bg_image = pygame.image.load(os.path.join("data", "stars_bg_4_3.png")).convert()
+bg_image_scale = width/bg_image.get_width()
 bg_image = pygame.transform.scale(bg_image, (width, height))
 #background.fill(bg_colour)
 #background = background.convert()
@@ -121,11 +122,15 @@ while mainloop:
             dist = (xdiff**2+ydiff**2)**0.5
             if (dist <= body_scale*bodies[1].body_radius):
                 phase = 3
-                bg_image = pygame.image.load(os.path.join("data", "mars_ships_bg_4_3.png")).convert()
+                bg_image = pygame.image.load(os.path.join("data", "mars_ships_bg_4_3.png"))
                 bg_image = pygame.transform.scale(bg_image, (width, height)).convert()
 
     elif(phase == 3):
-        pass
+        ship_image = pygame.image.load(os.path.join("data", "ship.png"))
+        new_dims = (int(ship_image.get_width()*bg_image_scale), int(ship_image.get_height()*bg_image_scale))
+        ship_image = pygame.transform.scale(bg_image, new_dims).convert()
+        screen.blit(ship_image, (0, 0))
+
     else:
         raise ValueError("Phase out of range!")
 
