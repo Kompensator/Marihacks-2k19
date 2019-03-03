@@ -2,12 +2,13 @@ import pygame
 from body import Body
 
 #Parameters
-width = 640
-height = 480
+width = 800
+height = 600
 bg_colour = (100, 100, 100)
 fps = 60
-secs_per_msecs = 1000*3600*1000
+secs_per_msecs = 1e-10
 pixels_per_meter = (1/3*height)/1.5e11
+body_scale = 1000
 
 #Conversion from pixels to meters
 def px(meters):
@@ -27,30 +28,32 @@ screen = pygame.display.set_mode((width, height))
 background = pygame.Surface(screen.get_size())
 background.fill(bg_colour)
 background = background.convert()
-screen.blit(background, (0,0))
 
 mainloop = True
-playtime = 0
+simtime = 0
 clock = pygame.time.Clock()
 
 #Data
 bodies = [Body()]
-body_surfaces = [pygame.Surface((px(2*body.r), 2*px(2*body.r))) for body in bodies]
+body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
 
 while mainloop:
     ms = clock.tick(fps)
-    playtime += ms/1000
-    text = "FPS: {0:.1f}   Playtime: {1:.1f}".format(clock.get_fps(), playtime)
+    simtime += ms*secs_per_msecs
+    text = """FPS: {0:.1f}   
+        Milliseconds since start: {1:.5f}   
+        Scale: {2:.0f} km/px""".format(clock.get_fps(), simtime*1000, 1/pixels_per_meter/1000)
     pygame.display.set_caption(text)
+    screen.blit(background, (0,0))
 
     #Body movement
     for body, surface in zip(bodies, body_surfaces):
         centered_coords = body.update_position(ms*secs_per_msecs)
         px_x, px_y = convert_coords(*centered_coords)
         surface.set_colorkey((0,0,0))
-        pygame.draw.circle(surface, body.colour, pxs(body.r, body.r), px(body.r))
+        pygame.draw.circle(surface, body.colour, pxs(body_scale*body.body_radius, body_scale*body.body_radius), px(body_scale*body.body_radius))
         surface = surface.convert()
-        screen.blit(surface, (px_x-px(body.r), px_y-px(body.r)))
+        screen.blit(surface, (px_x-px(body.body_radius), px_y-px(body.body_radius)))
 
     #Event handling
     for event in pygame.event.get():
