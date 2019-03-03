@@ -67,6 +67,17 @@ while mainloop:
         bsurface = bsurface.convert()
         screen.blit(bsurface, (px_x-px(body_scale*body.body_radius), px_y-px(body_scale*body.body_radius)))
 
+        if(phase == 0):
+            pass
+        elif(phase == 1):
+            pass
+        elif(phase == 2):
+            pass
+        elif(phase == 3):
+            pass
+        else:
+            raise ValueError("Phase out of range!")
+
     #Event handling
     for event in pygame.event.get():
         #Quit button
