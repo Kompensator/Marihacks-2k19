@@ -82,9 +82,7 @@ myfont = pygame.font.SysFont("Calibri",20)
 while mainloop:
     ms = clock.tick(fps)
     simtime += ms*secs_per_msecs
-    text = """FPS: {0:.1f}   
-        Days since start: {1:.0f}   
-        Scale: {2:.0f} km/px""".format(clock.get_fps(), simtime/3600/24, 1/pixels_per_meter/1000)
+    text = "FPS: {0:.1f}".format(clock.get_fps())
     pygame.display.set_caption(text)
     screen.blit(bg_image, (0,0))
 
@@ -131,7 +129,7 @@ while mainloop:
             delta_v = spaceship.velocity - math.sqrt(G*sun_mass/spaceship.r)
             spaceship.energy = bodies[0].energy
             spaceship.energy += delta_v**2/2
-            spaceship.areal_v *=  1.085 #((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
+            spaceship.areal_v *=  1.1 #((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
             spaceship.colour = (210,210,210)
             spaceship.q = spaceship.a*(1 - spaceship.eccentricity**2)
             launch_prepped = True
@@ -153,7 +151,7 @@ while mainloop:
             xdiff = (other_centered_pos[0] - centered_coords[0])
             ydiff = (other_centered_pos[1] - centered_coords[1])
             dist = (xdiff**2+ydiff**2)**0.5
-            if (dist <= body_scale*bodies[1].body_radius):
+            if (dist <= body_scale*bodies[1].body_radius*0.7):
                 phase = 3
                 bg_image = pygame.image.load(os.path.join("data", "mars_ships_bg_4_3.png"))
                 bg_image_scale = width/bg_image.get_width()
