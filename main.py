@@ -45,7 +45,7 @@ clock = pygame.time.Clock()
 phase = 0
 
 #Data
-bodies = [Body(), Body("Mars", 2.28555e11, 44, 0.0093, 4.5711e11, colour=(180,0,0))]
+bodies = [Body(), Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))]
 spaceship = Body(name="Spaceship", body_radius=1594525)        # creating an empty object i guess
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
 path_surfaces = [pygame.Surface(pxs(body.major_ax, body.minor_ax)) for body in bodies]
