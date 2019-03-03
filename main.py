@@ -30,6 +30,7 @@ def convert_coords(centeredx, centeredy):
 
 #Initialization
 pygame.init()
+pygame.font.init()
 screen = pygame.display.set_mode((width, height))
 background = pygame.Surface(screen.get_size()).convert()
 bg_image = pygame.image.load(os.path.join("data", "stars_bg_4_3.png")).convert()
@@ -50,6 +51,7 @@ spaceship = Body(name="Spaceship", body_radius=1594525)        # creating an emp
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
 path_surfaces = [pygame.Surface(pxs(body.major_ax, body.minor_ax)) for body in bodies]
 spaceship_surface = pygame.Surface(pxs(spaceship.major_ax, spaceship.minor_ax))
+myfont = pygame.font.SysFont("Calibri",20)
 
 while mainloop:
     ms = clock.tick(fps)
@@ -105,7 +107,6 @@ while mainloop:
             spaceship_surface.set_colorkey((0,0,0))
             pygame.draw.circle(spaceship_surface, spaceship.colour, pxs(body_scale*spaceship.body_radius, body_scale*spaceship.body_radius), px(body_scale*spaceship.body_radius))
             spaceship_surface = spaceship_surface.convert()
-            # centered_coords = spaceship.update_position(ms*secs_per_msecs)
             px_x, px_y = convert_coords(math.cos(math.radians(spaceship.angle + spaceship.initial_angle))*spaceship.r, math.sin(math.radians(spaceship.angle + spaceship.initial_angle))*spaceship.r)
             screen.blit(spaceship_surface, (px_x-px(body_scale*spaceship.body_radius), px_y-px(body_scale*spaceship.body_radius)))
         else:
@@ -148,6 +149,22 @@ while mainloop:
                 if phase == 0:
                     phase = 1
                     angle_delta = bodies[0].get_launch_angle(bodies[1])
+
+# put text on the screen
+    if phase == 0:
+        text = "Press Space to launch!"
+    
+    elif phase == 1:
+        text = "Waiting for optimal angle = 44 degrees  current angle = "+str(round(bodies[0].angle_difference(bodies[1])))+" degrees"
+    
+    elif phase == 2:
+        text = "Houston we're on our way!"
+    
+    else:
+        text = "The Eagle has landed!"
+    text_surface = myfont.render(text, False, (255,255,255))
+    screen.blit(text_surface, (0,0))
+
 
 
     #Display changes
