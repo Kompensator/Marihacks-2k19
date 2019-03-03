@@ -21,7 +21,6 @@ descent_speed = 1e-1
 earth_size = 6378100
 
 #Args
-argv.append("venus")
 planet = argv[1].lower()
 if planet == "mars":
     otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
@@ -29,8 +28,11 @@ if planet == "mars":
 elif planet == "jupiter":
     otherbody = Body("Jupiter", 778e9, 90, 0.048, 778.57e9, body_radius=1e7, colour=(255,178,102))
     pixels_per_meter = (1/6*height)/1.5e11
-elif planet == "venus":
-    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e9, earth_size*0.7, colour=(238, 215, 135))
+# elif planet == "venus":
+#    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e9, earth_size*0.7, colour=(238, 215, 135))
+elif planet == "saturn":
+    otherbody = Body("Saturn", 1443e9, 160, 0.0565, 2886e9, 8e6, colour=(247, 203, 59))
+    pixels_per_meter = (1/20*height)/1.5e11
 else:
     print("Invalid planet \""+planet+"\". Please enjoy Mars")
     otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
@@ -129,7 +131,7 @@ while mainloop:
             delta_v = spaceship.velocity - math.sqrt(G*sun_mass/spaceship.r)
             spaceship.energy = bodies[0].energy
             spaceship.energy += delta_v**2/2
-            spaceship.areal_v *=  1.08 #((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
+            spaceship.areal_v *=  1.085 #((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
             spaceship.colour = (183,183,183)
             spaceship.q = spaceship.a*(1 - spaceship.eccentricity**2)
             launch_prepped = True
