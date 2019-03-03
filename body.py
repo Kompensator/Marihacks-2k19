@@ -20,7 +20,8 @@ class Body(object):
         self.major_ax = major_ax
         self.a = major_ax/2
         self.b = self.a*(1-self.eccentricity**2)**0.5
-        self.minor_axis = 2*b
+        self.minor_ax = 2*self.b
+        self.c = self.eccentricity * self.a
         self.velocity = (G*sun_mass*(2/self.r - 1/(self.a)))**0.5
         self.energy = (self.velocity**2)/2 - G*sun_mass/self.r
         self.areal_v = ((G*G*sun_mass*sun_mass*(self.eccentricity**2 - 1))/(8*self.energy))**0.5
