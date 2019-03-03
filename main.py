@@ -153,8 +153,16 @@ while mainloop:
             screen.blit(ship_lower, (3*width//5, 0))
         elif dy <= 4*height//5:
             screen.blit(ship_image, (3*width//5, dy-ship_height))
+        elif dy <= height:
+            screen.blit(ship_image, ((3*width//5, 4*height//5-ship_height)))
         else:
             screen.blit(ship_image, ((3*width//5, 4*height//5-ship_height)))
+            astronaut_image = pygame.image.load(os.path.join("data", "astronaut.png"))
+            new_dims = (int(ship_image.get_width()*bg_image_scale), int(ship_image.get_height()*bg_image_scale))
+            astronaut_image = pygame.transform.scale(astronaut_image, new_dims)
+            astronaut_image.set_colorkey((0,0,0))
+            astronaut_image = astronaut_image.convert()
+            screen.blit(astronaut_image, (2*width//5, 4*height//5-astronaut_image.get_height())) 
 
         
 
