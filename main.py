@@ -18,6 +18,7 @@ global G, sun_mass
 G = 6.673e-11
 sun_mass = 1.989e30
 descent_speed = 1e-1
+earth_size = 6378100
 
 #Args
 planet = argv[1].lower()
@@ -25,8 +26,10 @@ if planet == "mars":
     otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
     pixels_per_meter = (1/4*height)/1.5e11
 elif planet == "jupiter":
-    otherbody = Body("Jupyter", 778e9, 90, 0.048, 778.57e9, body_radius=1e7, colour=(255,178,102))
+    otherbody = Body("Jupiter", 778e9, 90, 0.048, 778.57e9, body_radius=1e7, colour=(255,178,102))
     pixels_per_meter = (1/6*height)/1.5e11
+elif planet == "venus":
+    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e6, earth_size*0.8, colour=(238, 215, 135))
 else:
     print("Invalid planet \""+planet+"\". Please enjoy Mars")
     otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
