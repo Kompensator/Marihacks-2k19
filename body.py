@@ -21,7 +21,7 @@ class Body(object):
         self.a = major_ax/2
         self.velocity = (G*sun_mass*(2/self.r - 1/(self.a)))**0.5
         self.energy = (self.velocity**2)/2 - G*sun_mass/self.r
-        self.areal_v = (G*G*sun_mass*sun_mass*(self.eccentricity**2 - 1))/(8*self.energy)
+        self.areal_v = ((G*G*sun_mass*sun_mass*(self.eccentricity**2 - 1))/(8*self.energy))**0.5
         self.colour = colour
         self.q = self.a*(1 - self.eccentricity**2)
         self.body_radius = body_radius
@@ -66,19 +66,27 @@ class Body(object):
         return launch_angle_delta
     
 def update(frame):
-    pass
+    x,y = Earth.update_position(7200)
+    earth_plot.set_data([x],[y])
+    x,y = Mars.update_position(7200)
+    mars_plot.set_data([x],[y])
+    return earth_plot, mars_plot
 
 if __name__ == "__main__":
-    # Earth = Body()
-    # Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11) 
-    # fig, ax = plt.subplots()
-    # ax.set_facecolor('xkcd:black')
-    # ax.set_xlim(-3e11, 3e11)
-    # ax.set_ylim(-3e11, 3e11)
-    # earth_plot, = plt.plot([], [], color='#2b63d8', marker='o',
-    #                    markerfacecolor='#2b63d8', markersize=7, animated=True)
-    # mars_plot, = plt.plot([], [], color='#f58061', marker='o',
-    #                   markerfacecolor='#f58061', markersize=6, animated=True)
+    Earth = Body()
+    Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11) 
+    fig, ax = plt.subplots()
+    ax.set_facecolor('xkcd:black')
+    ax.set_xlim(-3e11, 3e11)
+    ax.set_ylim(-3e11, 3e11)
+    earth_plot, = plt.plot([], [], color='#2b63d8', marker='o',
+                       markerfacecolor='#2b63d8', markersize=7, animated=True)
+    mars_plot, = plt.plot([], [], color='#f58061', marker='o',
+                      markerfacecolor='#f58061', markersize=6, animated=True)
+    
+    ani = FuncAnimation(fig, update, interval=1, blit=True)
+    plt.show()
+
     
 else:
     pass
