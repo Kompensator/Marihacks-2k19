@@ -132,7 +132,7 @@ while mainloop:
             spaceship.energy = bodies[0].energy
             spaceship.energy += delta_v**2/2
             spaceship.areal_v *=  1.085 #((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
-            spaceship.colour = (183,183,183)
+            spaceship.colour = (210,210,210)
             spaceship.q = spaceship.a*(1 - spaceship.eccentricity**2)
             launch_prepped = True
 
