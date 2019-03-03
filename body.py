@@ -1,4 +1,6 @@
 import math
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 global G, sun_mass
 G = 6.673e-11
@@ -9,7 +11,7 @@ class Body(object):
     default values for earth
     update_position needs dt to run
     """
-    def __init__ (self, name = "Earth", r = 1.5e11, angle=0, eccentriticy=0.0167, major_ax=3e11, colour=(255,255,255)):    
+    def __init__ (self, name = "Earth", r = 1.5e11, angle=0, eccentriticy=0.0167, major_ax=3e11, body_radius=6378100, colour=(255,255,255)):    
         self.name = name
         self.r = r
         self.angle = angle      #changes
@@ -22,6 +24,7 @@ class Body(object):
         self.areal_v = (G*G*sun_mass*sun_mass*(self.eccentricity**2 - 1))/(8*self.energy)
         self.colour = colour
         self.q = self.a*(1 - self.eccentricity**2)
+        self.body_radius = body_radius
         self.period = ((4*math.pi**2*self.a**3)/(G*sun_mass))**0.5
 
 
@@ -61,11 +64,21 @@ class Body(object):
         other_initial_angle = t_transfer*360/other_body.period
         launch_angle_delta = 180 - other_initial_angle
         return launch_angle_delta
+    
+def update(frame):
+    pass
 
 if __name__ == "__main__":
-    Earth = Body()
-    Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11)      
-    launch_angle_delta = Earth.get_launch_angle(Mars)
-    print (launch_angle_delta)
+    # Earth = Body()
+    # Mars = Body("Mars", 2.28555e11, 70, 0.0093, 4.5711e11) 
+    # fig, ax = plt.subplots()
+    # ax.set_facecolor('xkcd:black')
+    # ax.set_xlim(-3e11, 3e11)
+    # ax.set_ylim(-3e11, 3e11)
+    # earth_plot, = plt.plot([], [], color='#2b63d8', marker='o',
+    #                    markerfacecolor='#2b63d8', markersize=7, animated=True)
+    # mars_plot, = plt.plot([], [], color='#f58061', marker='o',
+    #                   markerfacecolor='#f58061', markersize=6, animated=True)
+    
 else:
     pass
