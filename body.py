@@ -33,13 +33,16 @@ class Body(object):
 
         print("Body "+ name+ " created")
 
-    def update_position(self, delta_t):
-        self.angle += (2*self.areal_v/self.r**2)*delta_t
+    def get_position(self):
         self.r = self.q/(1 + self.eccentricity*math.cos(math.radians(self.angle)))
         self.velocity = (G*sun_mass*(2/self.r - 1/(self.a)))**0.5
+        return math.cos(math.radians(self.angle))*self.r, math.sin(math.radians(self.angle))*self.r
+
+    def update_position(self, delta_t):
+        self.angle += (2*self.areal_v/self.r**2)*delta_t
         if self.angle > 360:
             self.fix_angle()
-        return math.cos(math.radians(self.angle))*self.r, math.sin(math.radians(self.angle))*self.r
+        return self.get_position()
     
     def spaceship_update(self, delta_t):
         self.angle += (2*self.areal_v/self.r**2)*delta_t
