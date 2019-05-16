@@ -2,11 +2,11 @@
 ## Repository for Marihacks 2019
 
 # To simulate a Hohmann transfer from Earth to another planet using realistic Keplerian physics
-The Hohmann transfer is the most energy-efficient way to transfer between two planets
-However, the two planets have to be in a certain relative position to allow this transfer
-This project simulates such a transfer from Earth to one of the outter planets
-When the user presses `space`, the software holds the launch until the optimal position is obtained
-To implement Keplerian physics, Euler numerical integration is used to update each planet's position
+The Hohmann transfer is the most energy-efficient way to transfer between two planets.
+However, the two planets have to be in a certain relative position to allow this transfer.
+This project simulates such a transfer from Earth to one of the outter planets.
+When the user presses `space`, the software holds the launch until the optimal position is obtained.
+To implement Keplerian physics, Euler numerical integration is used to update each planet's position.
 
 
 # To run:
