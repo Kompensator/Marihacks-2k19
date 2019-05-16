@@ -28,14 +28,14 @@ if planet == "mars":
 elif planet == "jupiter":
     otherbody = Body("Jupiter", 778e9, 140, 0.048, 778.57e9, body_radius=1e7, colour=(255,178,102))
     pixels_per_meter = (1/6*height)/1.5e11
-# elif planet == "venus":
-#    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e9, earth_size*0.7, colour=(238, 215, 135))
+elif planet == "venus":
+    otherbody = Body("Venus", 108e9, 160, 0.007, 2*108.6e9, earth_size*0.7, colour=(238, 215, 135))
 elif planet == "saturn":
     otherbody = Body("Saturn", 1443e9, 160, 0.0565, 2886e9, 1.5*8e6, colour=(247, 203, 59))
     pixels_per_meter = (1/20*height)/1.5e11
 else:
     print("Invalid planet \""+planet+"\". Please enjoy Mars")
-    otherbody = Body("Mars", 2.28555e11, 90, 0.0093, 4.5711e11, colour=(180,0,0))
+    otherbody = Body("Mars", 2.28555e11, 120, 0.0093, 4.5711e11, colour=(180,0,0))
     pixels_per_meter = (1/4*height)/1.5e11
 
 def px(meters):
@@ -72,7 +72,7 @@ phase = 0
 #Data
 bodies = [Body(), otherbody]
 
-spaceship = Body(name="Spaceship", body_radius=1594525)        # creating an empty object i guess
+spaceship = Body(name="Spaceship", body_radius=1594525)        # creating an empty object
 body_surfaces = [pygame.Surface((px(2*body_scale*body.body_radius), px(2*body_scale*body.body_radius))) for body in bodies]
 path_surfaces = [pygame.Surface(pxs(body.major_ax, body.minor_ax)) for body in bodies]
 spaceship_surface = pygame.Surface(pxs(spaceship.major_ax, spaceship.minor_ax))
@@ -128,7 +128,7 @@ while mainloop:
             delta_v = spaceship.velocity - math.sqrt(G*sun_mass/spaceship.r)
             spaceship.energy = bodies[0].energy
             spaceship.energy += delta_v**2/2
-            spaceship.areal_v *=  1.1 #((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
+            spaceship.areal_v *= 1.1 # ((G*G*sun_mass*sun_mass*(spaceship.eccentricity**2 - 1))/(8*spaceship.energy))**0.5
             spaceship.colour = (210,210,210)
             spaceship.q = spaceship.a*(1 - spaceship.eccentricity**2)
             launch_prepped = True
@@ -145,7 +145,7 @@ while mainloop:
             centered_coords = spaceship.spaceship_update(ms*secs_per_msecs)
             px_x, px_y = convert_coords(*centered_coords)
             screen.blit(spaceship_surface, (px_x-px(body_scale*spaceship.body_radius), px_y-px(body_scale*spaceship.body_radius)))
-        
+
             other_centered_pos = bodies[1].get_position()
             xdiff = (other_centered_pos[0] - centered_coords[0])
             ydiff = (other_centered_pos[1] - centered_coords[1])
@@ -180,9 +180,9 @@ while mainloop:
             astronaut_image = pygame.transform.scale(astronaut_image, new_dims)
             astronaut_image.set_colorkey((0,0,0))
             astronaut_image = astronaut_image.convert()
-            screen.blit(astronaut_image, (2*width//5, 4*height//5-astronaut_image.get_height())) 
+            screen.blit(astronaut_image, (2*width//5, 4*height//5-astronaut_image.get_height()))
 
-        
+
 
     else:
         raise ValueError("Phase out of range!")
@@ -191,7 +191,7 @@ while mainloop:
     #Event handling
     for event in pygame.event.get():
         #Quit button
-        if event.type == pygame.QUIT: 
+        if event.type == pygame.QUIT:
             mainloop = False
         #Keypresses
         elif event.type == pygame.KEYDOWN:
@@ -205,13 +205,13 @@ while mainloop:
 # put text on the screen
     if phase == 0:
         text = "Press Space to launch!"
-    
+
     elif phase == 1:
         text = "Waiting for optimal angle = "+str(round(angle_delta))+ " degrees  Current angle = "+str((round(bodies[0].angle_difference(bodies[1]))+360)%360)+" degrees"
-    
+
     elif phase == 2:
         text = "Houston we're on our way!"
-    
+
     else:
         text = "The Eagle has landed!"
     text_surface = myfont.render(text, False, (255,255,255))
